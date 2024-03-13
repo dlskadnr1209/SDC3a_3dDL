@@ -25,6 +25,10 @@ parser.add_argument('--apply_to_SDC3a', type=bool, default=True, help='To apply 
 
 if __name == '__main__':
     args=parser.parse_args()
+
+    gpus = tf.config.list_physical_devices('GPU')
+    for gpu in gpus:
+        tf.config.experimental.set_memory_growth(gpu, True)
     Mytrainset
     Mytrain
     Mytest
