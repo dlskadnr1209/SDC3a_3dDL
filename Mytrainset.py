@@ -5,11 +5,11 @@ from pygdsm import GlobalSkyModel16
 from random import randrange as rr
 import matplotlib.pyplot as plt
 from astropy.io import fits
-input_path = "/scr1/nulee/SDC3"
-save_path = '/scr1/nulee/SDC3/trainset'
+#input_path = "/scr1/nulee/SDC3"
+#save_path = '/scr1/nulee/SDC3/trainset'
 beamsize = 4000
 
-'''first commit
+
 def MJysr_to_Jybeam(mjysr, beamsize_arcsec2):
     beamsize_sr = beamsize_arcsec2 * (np.pi / (180**2 * 3600**2))
     jysr = mjysr * 1e6
@@ -28,15 +28,15 @@ for d in range(264):
     plt.close('all')
 np.save(input_path + '/background',background.astype(np.float32))
 print("background_generated")
-'''
 
-'''Saving Real SDC3 data
+
+
 SDC3 = fits.open("/vega/home/nulee/ZW3.msw_image.fits")[0].data
 for i in range(100):
     i, j, k = rr(64, 200), rr(600, 1448), rr(600, 1448)
     SDC3_real = SDC3[i-64:i+64,j-64:j+64,k-64:k+64].astype(np.float32)
 np.save(save_path + '/SDC3_REAL',SDC3_real.astype(np.float32))
-'''
+
 def point_sources(path,i,j,k):
     ps=np.load(path+"/ps.npy")
     return ps[i-64:i+64,j-64:j+64,k-64:k+64].astype(np.float32)
