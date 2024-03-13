@@ -5,7 +5,7 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras import losses
 from tensorflow.keras.layers import Layer
 from tensorflow.keras.layers import Activation
-
+import os
 import numpy as np
 import sys
 sys.stdout = open('test_output.txt','w')
@@ -77,24 +77,19 @@ def build_unet(input_shape):
 
     return model
 
-input_shape = (128, 128, 128, 1)
+def training(input_path,output_path,epochs,validation_split,batch_size)
+    input_shape = (128, 128, 128, 1)
+    os.path.join(input_path,'/train_x.npy')
+    model = build_unet(input_shape)
+    model.compile(optimizer=Adam(), loss=losses.MeanSquaredError(), metrics=[tf.keras.metrics.RootMeanSquaredError()])
+    model.summary()
 
-model = build_unet(input_shape)
-model.compile(optimizer=Adam(), loss=losses.MeanSquaredError(), metrics=[tf.keras.metrics.RootMeanSquaredError()])
-model.summary()
-
-# Build model
-#strategy = tf.distribute.MirroredStrategy(devices=["/gpu:0","/gpu:3"])
-#print('Number of devices: {}'.format(strategy.num_replicas_in_sync))
-train_dataset = tf.data.Dataset.from_tensor_slices(((np.load('/home/scratch/SDCunist/3d_DL/Train_sets/train_x.npy')),np.load('/home/scratch/SDCunist/3d_DL/Train_sets/train_y.npy'))).batch(4).prefetch(tf.data.experimental.AUTOTUNE)
-#test_dataset = tf.data.Dataset.from_tensor_slices(((np.load('/home/scratch/SDCunist/3d_DL/trainset_1/test_x.npy')), np.load('/home/scratch/SDCunist/3d_DL/trainset_1/test_y.npy'))).batch(4).prefetch(tf.data.experimental.AUTOTUNE)
-
-checkpoint_filepath="/home/scratch/SDCunist/3d_DL"
-model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_filepath,
+    train_dataset = tf.data.Dataset.from_tensor_slices(np.load(os.path.join(input_path,'/train_x.npy')),np.load(os.path.join(input_path,'/train_y.npy'))).batch(batch_size).prefetch(tf.data.experimental.AUTOTUNE)
+    checkpoint_filepath=output_path
+    model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_filepath,
                                                                save_weights_only=False,
                                                                monitor='val_root_mean_squared_error',
                                                                mode='min',
                                                                save_best_only=True)
-#with strategy.scope():
-model.fit(train_dataset,epochs=100,validation_split=0.2,callbacks=[model_checkpoint_callback])
-model.save("/home/scratch/SDCunist/3d_DL/copy1.h5")
+    model.fit(train_dataset,epochs=epochs,validation_split=validation_split,callbacks=[model_checkpoint_callback])
+    model.save(os.path.join(output_path,'/3Dmodel.h5'))

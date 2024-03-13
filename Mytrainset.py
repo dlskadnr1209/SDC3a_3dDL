@@ -62,7 +62,7 @@ def generate_data(Rotation):
     else:
         return DE,DE+PS
 
-def process_data(save_path,number_of_trainset=2560,Rotational_Agumentation=True)
+def process_data(save_path,numbber_of_trainset,Rotational_Agumentation)
     if Rotational_Agumnetation:
         Train_DE=np.zeros((number_of_trainset*4,128,128,128));Train_DEPS=np.zeros((number_of_trainset*4,128,128,128))
         for i in range(number_of_trainset):
