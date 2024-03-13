@@ -1,0 +1,3 @@
+trainset/*.npy
+
+model/*.h5
