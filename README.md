@@ -4,8 +4,14 @@
 This project introduces deep learning models for point source removal based on the SKA Science Data Challenge 3a. It utilizes a 3D u-NET architecture to effectively identify and remove point sources from astronomical data, potentially playing a significant role in astronomical research.
 
 ### Prerequisites
-Before starting, ensure you have Python 3.7, TensorFlow 2.4, Astropy 4.0.1, Healpy 1.14.0, and Numpy 1.16.4 installed. The project is designed to leverage GPU acceleration for deep learning model training, so a GPU-enabled setup is recommended.
+Before starting, ensure you have TensorFlow 2.4, Astropy 4.0.1, Healpy 1.14.0, and Numpy 1.16.4 installed. Virtual envirionment is recommended. The project is designed to leverage GPU acceleration for deep learning model training, so a GPU-enabled setup is recommended.
 
+Pygdsm package is required for generating training sets.
+
+```bash
+"pip3 install pygdsm"
+
+```
 ### Installation
 Clone the project to your local system and install the required dependencies as follows:
 
