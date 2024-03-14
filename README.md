@@ -21,22 +21,22 @@ Run the main script of the project like this:
 python main.py <input_path> <output_path> [OPTIONS]
 ```
 ## Required Arguments
-input_path: Path to the input data.
-output_path: Path where the output will be saved.
+> input_path: Path to the input data.
+> output_path: Path where the output will be saved.
 ## Optional Arguments
 
---making_train_set: Flag to trigger the creation of the training set.
--n, --number_of_trainset: Specify the number of training sets (default: 2560).
--a, --augmentation: Enable rotational augmentation (augments the number of training sets by 4).
--b, --background: Flag to create a background cube.
---making_test_data: Flag to generate SDC3 test data.
--f, --frequency_channels: Number of frequency channels (default: 264, with 1 channel = 0.1MHz).
--e, --epochs: Number of training epochs (default: 10).
--v, --validation_split: Fraction of the data to be used as validation set (default: 0.2).
---batch_size: Batch size for training (default: 4).
---apply_to_SDC3a: Flag to apply the model to SDC3 test data.
+> --making_train_set: Flag to trigger the creation of the training set.
+> -n, --number_of_trainset: Specify the number of training sets (default: 2560).
+> -a, --augmentation: Enable rotational augmentation (augments the number of training sets by 4).
+> -b, --background: Flag to create a background cube.
+> --making_test_data: Flag to generate SDC3 test data.
+> -f, --frequency_channels: Number of frequency channels (default: 264, with 1 channel = 0.1MHz).
+> -e, --epochs: Number of training epochs (default: 10).
+> -v, --validation_split: Fraction of the data to be used as validation set (default: 0.2).
+> --batch_size: Batch size for training (default: 4).
+> --apply_to_SDC3a: Flag to apply the model to SDC3 test data.
 
-Replace <input_path> and <output_path> with your desired file paths and use the optional arguments as needed for your specific requirements.
+>Replace <input_path> and <output_path> with your desired file paths and use the optional arguments as needed for your specific requirements.
 
 ## License
 This project is distributed under the MIT License.
