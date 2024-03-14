@@ -20,8 +20,7 @@ Run the main script of the project like this:
 ```bash
 python main.py <input_path> <output_path> --epochs 10 --batch_size 4
 ```
-
-### Replace <input_path> and <output_path> with your desired file paths and specify additional options as required.
+Replace <input_path> and <output_path> with your desired file paths and specify additional options as required.
 
 ## License
 This project is distributed under the MIT License.
