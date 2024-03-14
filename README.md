@@ -9,7 +9,7 @@ Before starting, ensure you have TensorFlow 2.4, Astropy 4.0.1, Healpy 1.14.0, a
 Pygdsm package is required for generating training sets.
 
 ```bash
-"pip3 install pygdsm"
+pip3 install pygdsm
 
 ```
 ### Installation
@@ -58,4 +58,4 @@ Replace <input_path> and <output_path> with your desired file paths and use the 
 This project is distributed under the MIT License.
 
 ### Authors and Contributors
-Namuk Lee, dlskadnr1209@unist.ac.kr
+Namuk Lee, UNIST :  dlskadnr1209@unist.ac.kr, dlskadnr1209@gmail.com
