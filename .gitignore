@@ -1,3 +1,9 @@
 trainset/*.npy
 
 model/*.h5
+
+assets/*
+
+variables/*
+
+saved_model.pb
