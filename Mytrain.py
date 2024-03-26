@@ -130,9 +130,12 @@ def training(input_path, output_path, epochs, validation_ratio, batch_size):
                                                                    monitor='val_root_mean_squared_error',
                                                                    mode='min',
                                                                    save_best_only=True)
+    tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=20)
+    tensorboard_filepath=os.path.join(output_path, 'logs')
+    tf.keras.callbacks.TensorBoard(log_dir=tensorboard_filepath)
 
     # Train the model
-    model.fit(train_dataset, epochs=epochs, validation_data=val_dataset, callbacks=[model_checkpoint_callback])
+    model.fit(train_dataset, epochs=epochs, validation_data=val_dataset, callbacks=[model_checkpoint_callback, early_stopping_callback, tensorboard_callback])
 
     # Save the final model
     model.save(os.path.join(output_path, '3Dmodel.h5'))
