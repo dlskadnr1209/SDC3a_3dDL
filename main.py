@@ -36,6 +36,9 @@ if __name__ == '__main__':
     for gpu in gpus:
         tf.config.experimental.set_memory_growth(gpu, True)
 
+    global numgpus
+    numgpus=len(gpus)
+
     # Process for generating training data
     if args.making_train_set:
         Mytrainset.process_data(args.output_path, args.number_of_trainset, args.agumentation)

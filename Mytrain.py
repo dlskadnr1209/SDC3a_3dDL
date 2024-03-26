@@ -5,6 +5,7 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras import losses
 from tensorflow.keras.layers import Layer
 from tensorflow.keras.layers import Activation
+from tensorflow.distribute import MirroredStrategy
 import os
 import numpy as np
 import sys
@@ -89,9 +90,17 @@ def build_unet(input_shape):
 
 # Function to train the U-Net model
 def training(input_path, output_path, epochs, validation_ratio, batch_size):
-    input_shape = (128, 128, 128, 1)
-    model = build_unet(input_shape)
-    model.compile(optimizer=Adam(), loss=losses.MeanSquaredError(), metrics=[tf.keras.metrics.RootMeanSquaredError()])
+
+    global numgpus
+
+    strategy = MirroredStrategy()
+    strategy.extended._cross_device_ops = tf.distribute.ReductionToOneDevice() # if NCCL do not work for your setting, please try this
+
+    with strategy.scope():
+        input_shape = (128, 128, 128, 1)
+        model = build_unet(input_shape)
+        model.compile(optimizer=Adam(), loss=losses.MeanSquaredError(), metrics=[tf.keras.metrics.RootMeanSquaredError()])
+
     model.summary()
 
     # Load the data
@@ -105,9 +114,14 @@ def training(input_path, output_path, epochs, validation_ratio, batch_size):
     x_train, x_val = x[:num_train_samples], x[num_train_samples:]
     y_train, y_val = y[:num_train_samples], y[num_train_samples:]
 
+    if numgpus==0:
+        global_batch_size=batch_size*numgpus:
+    else:
+        global_batch_size=batch_size*numgpus
+
     # Create tf.data.Dataset
-    train_dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train)).shuffle(num_train_samples).batch(batch_size).prefetch(tf.data.experimental.AUTOTUNE)
-    val_dataset = tf.data.Dataset.from_tensor_slices((x_val, y_val)).batch(batch_size).prefetch(tf.data.experimental.AUTOTUNE)
+    train_dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train)).shuffle(num_train_samples).batch(global_batch_size).prefetch(tf.data.experimental.AUTOTUNE)
+    val_dataset = tf.data.Dataset.from_tensor_slices((x_val, y_val)).batch(global_batch_size).prefetch(tf.data.experimental.AUTOTUNE)
 
     # Checkpoint callback
     checkpoint_filepath = os.path.join(output_path, 'checkpoint')
