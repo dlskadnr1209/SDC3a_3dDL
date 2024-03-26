@@ -16,8 +16,8 @@ pip3 install pygdsm
 Clone the project to your local system and install the required dependencies as follows:
 
 ```bash
-git clone https://your-project-repository-url.git
-cd your-project-directory
+git clone https://github.com/dlskadnr1209/SDC3a_3dDL.git
+cd SDC3a_3dDL.git
 pip install -r requirements.txt
 ```
 ### Usage
