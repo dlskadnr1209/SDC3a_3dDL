@@ -95,11 +95,25 @@ def training(input_path, output_path, epochs, validation_ratio, batch_size):
 
     strategy = MirroredStrategy()
     strategy.extended._cross_device_ops = tf.distribute.ReductionToOneDevice() # if NCCL do not work for your setting, please try this
+    
+    #Customized loss function
+    def custom_loss(y_true, y_pred):
+        abs_diff = mean(abs(y_true - y_pred))
+
+        point_source_penalty = tf.where(y_pred > 0.01,
+                                    square(y_pred - y_true),
+                                    tf.zeros_like(y_pred))
+        point_source_loss = mean(point_source_penalty)
+
+
+        total_loss = abs_diff + point_source_loss
+
+        return total_loss
 
     with strategy.scope():
         input_shape = (128, 128, 128, 1)
         model = build_unet(input_shape)
-        model.compile(optimizer=Adam(), loss=losses.MeanSquaredError(), metrics=[tf.keras.metrics.RootMeanSquaredError()])
+        model.compile(optimizer=Adam(), loss=custom_loss)
 
     model.summary()
 
@@ -133,7 +147,7 @@ def training(input_path, output_path, epochs, validation_ratio, batch_size):
     tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=20)
     tensorboard_filepath=os.path.join(output_path, 'logs')
     tf.keras.callbacks.TensorBoard(log_dir=tensorboard_filepath)
-
+    
     # Train the model
     model.fit(train_dataset, epochs=epochs, validation_data=val_dataset, callbacks=[model_checkpoint_callback, early_stopping_callback, tensorboard_callback])
 
